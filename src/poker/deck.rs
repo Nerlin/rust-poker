@@ -1,11 +1,10 @@
-use crate::poker::card::{Card, Suit, Quantity};
+use crate::poker::card::{Card, Quantity, Suit};
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
 pub struct Deck {
     pub cards: Vec<Card>,
 }
-
 
 impl Deck {
     pub fn create() -> Deck {
@@ -15,14 +14,12 @@ impl Deck {
             for quantity in Quantity::all() {
                 cards.push(Card {
                     suit: *suit,
-                    quantity: *quantity
+                    quantity: *quantity,
                 })
             }
         }
 
-        Deck {
-            cards
-        }
+        Deck { cards }
     }
 
     pub fn deal(&mut self) -> Option<Card> {

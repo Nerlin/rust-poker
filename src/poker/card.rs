@@ -1,15 +1,18 @@
-use std::fmt::Display;
 use std::cmp::Ordering;
+use std::fmt::Display;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, Eq)]
 pub struct Card {
     pub suit: Suit,
-    pub quantity: Quantity
+    pub quantity: Quantity,
 }
 
 impl Card {
     pub fn new() -> Card {
-        Card { suit: Suit::Spades, quantity: Quantity::Ten }
+        Card {
+            suit: Suit::Spades,
+            quantity: Quantity::Ten,
+        }
     }
 }
 
@@ -25,27 +28,33 @@ impl Display for Card {
     }
 }
 
+impl PartialOrd for Card {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        return self.quantity.partial_cmp(&other.quantity);
+    }
+}
 
+impl Ord for Card {
+    fn cmp(&self, other: &Self) -> Ordering {
+        return self.quantity.cmp(&other.quantity);
+    }
+}
 
-#[derive(Copy, Clone, PartialEq)]
+pub type Hand = [Card; 5];
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Suit {
     Spades,
     Clubs,
     Diamonds,
-    Hearts
+    Hearts,
 }
 
 impl Suit {
     pub fn all() -> &'static [Suit] {
-        &[
-            Suit::Spades,
-            Suit::Clubs,
-            Suit::Diamonds,
-            Suit::Hearts
-        ]
+        &[Suit::Spades, Suit::Clubs, Suit::Diamonds, Suit::Hearts]
     }
 }
-
 
 impl Display for Suit {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -53,13 +62,12 @@ impl Display for Suit {
             Suit::Spades => write!(f, "♣"),
             Suit::Clubs => write!(f, "♠"),
             Suit::Diamonds => write!(f, "♦"),
-            Suit::Hearts => write!(f, "♥")
+            Suit::Hearts => write!(f, "♥"),
         }
     }
 }
 
-
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, Eq, Ord, Hash)]
 pub enum Quantity {
     Two = 2,
     Three = 3,
@@ -73,7 +81,7 @@ pub enum Quantity {
     Jack = 11,
     Queen = 12,
     King = 13,
-    Ace = 14
+    Ace = 14,
 }
 
 impl Quantity {
@@ -91,7 +99,7 @@ impl Quantity {
             Quantity::Jack,
             Quantity::Queen,
             Quantity::King,
-            Quantity::Ace
+            Quantity::Ace,
         ]
     }
 }
